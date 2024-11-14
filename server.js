@@ -1,10 +1,11 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const passport = require("passport");
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const cookieSession = require("cookie-session");
 const connectDB = require("./config/db");
 const bodyParser = require("body-parser");
+const cors = require("cors"); // Import cors
+const courseContentRoutes = require('./routes/courseContentRoutes');
+const scheduleRoutes = require('./routes/ScheduleRoutes'); // Add this line
 
 dotenv.config();
 connectDB();
@@ -12,7 +13,13 @@ connectDB();
 const app = express();
 app.use(bodyParser.json());
 
-// Session middleware
+// Enable CORS for all routes
+app.use(cors({
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  credentials: true // Allow cookies and sessions to be sent across origins
+}));
+
+// Session middleware (Optional, can remove if not using sessions)
 app.use(
   cookieSession({
     name: "session",
@@ -21,45 +28,9 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Passport configuration
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
-    },
-    (accessToken, refreshToken, profile, done) => {
-      // Save or update user profile in the database
-      return done(null, profile);
-    }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
 // Routes
-app.get(
-  "/api/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-
-app.get(
-  "/api/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    res.redirect("/dashboard"); // Redirect to a dashboard or main page on success
-  }
-);
+app.use('/api', courseContentRoutes);
+app.use('/api', scheduleRoutes);  // Schedule Routes
 
 // Your other routes
 
