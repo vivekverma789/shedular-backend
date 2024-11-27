@@ -10,4 +10,7 @@ router.get('/schedule/available', scheduleController.getAllSchedules);  // New r
 // Route to remove a schedule
 router.delete('/schedule/remove/:scheduleId', scheduleController.removeSchedule);
 
+// Route to match schedules based on user preferences
+router.post('/schedule/match', scheduleController.matchSchedules);
+
 module.exports = router;
