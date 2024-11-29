@@ -3,6 +3,8 @@ const MutualTransfer = require("../models/MutualTransfer");
 // Save mutual transfer data
 exports.saveMutualTransfer = async (req, res) => {
   try {
+    const userId = req.user._id; // Get user ID from middleware
+
     console.log(req.body)
     const {
       selectedGoal,
@@ -32,6 +34,7 @@ exports.saveMutualTransfer = async (req, res) => {
 
     // Create a new MutualTransfer document
     const newTransfer = new MutualTransfer({
+      userId,
       selectedGoal,
       fullName,
       employeeNo,

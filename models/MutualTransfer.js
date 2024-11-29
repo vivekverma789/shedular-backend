@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const MutualTransferSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: "User", // Reference to the User model
+  },
   selectedGoal: {
     type: String,
     required: true,

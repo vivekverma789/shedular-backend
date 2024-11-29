@@ -84,13 +84,14 @@ exports.removeSchedule = async (req, res) => {
 exports.matchSchedules = async (req, res) => {
   const { goal, exam, category, hrsanddays, stage, duration } = req.body;
 
-  console.log("Request Body:", req.body);
+  console.log("Request Bodys:", req.body);
 
   try {
     // Fetch the matching CourseContent based on goal and duration
     const courseContent = await CourseContent.findOne({ goal, duration });
 
     if (!courseContent) {
+      console.log("notdounf")
       return res.status(404).json({ error: "No course content matches the selected duration." });
     }
 

@@ -3,6 +3,7 @@ const passport = require("passport");
 require("../config/passportConfig");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const JWT_SECRET = "your_secret_key"; // Replace with a secure secret key
 
 const router = express.Router();
 
@@ -30,11 +31,13 @@ router.get("/auth/logout", (req, res) => {
   });
 });
 
+// JWT secret
+
 router.post("/auth/google", async (req, res) => {
   try {
     const { token } = req.body;
 
-    // Decode the token
+    // Decode the Google OAuth token
     const decoded = jwt.decode(token);
 
     if (!decoded) {
@@ -43,7 +46,7 @@ router.post("/auth/google", async (req, res) => {
 
     const { sub: googleId, name, email, picture: profilePicture } = decoded;
 
-    // Find or create user in the database
+    // Find or create the user in the database
     let user = await User.findOne({ googleId });
 
     if (!user) {
@@ -56,11 +59,22 @@ router.post("/auth/google", async (req, res) => {
       });
     }
 
-    // Respond with user data
+    // Generate a JWT with no expiry
+    const authToken = jwt.sign(
+      { id: user._id, googleId: user.googleId, name: user.name },
+      JWT_SECRET
+    );
+
+    // Respond with the token and user data
     res.json({
       success: true,
-      user,
-      message: "Google Login Successful",
+      authToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        profilePicture: user.profilePicture,
+      },
     });
   } catch (error) {
     console.error("Error during Google Login:", error);

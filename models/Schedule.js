@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const scheduleSchema = new mongoose.Schema({
   goalId: { type: mongoose.Schema.Types.ObjectId, ref: 'CourseContent', required: true },
-  goal: { type: String, enum: ['SSC', 'RRB', 'Banking'], required: true }, // Modified to goal
+  goal: { type: String, enum: ['SSC', 'RRB', 'BANKING'], required: true }, // Modified to goal
   exam: { type: String, enum: ['CGL', 'CPO', 'CHSL', 'MTS', 'GD', 'NTPC', 'ALP', 'JE', 'Group-D', 'PO', 'Clerk'], required: true },
   category: { type: String, enum: ['FRESHER', 'REPEATER', 'BOTH'], required: true },
   hrsanddays: { type: String, enum: ['<5', '>5'], required: true },

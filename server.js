@@ -13,6 +13,7 @@ const courseContentRoutes = require("./routes/courseContentRoutes");
 const scheduleRoutes = require("./routes/ScheduleRoutes");
 const purchasedScheduleRoutes = require("./routes/purchasedScheduleRoutes");
 const expertRoutes = require("./routes/expertRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 // Load environment variables
 dotenv.config();
@@ -53,6 +54,7 @@ app.use("/api", scheduleRoutes);
 app.use("/api", mutualTransferRoutes);
 app.use("/api", purchasedScheduleRoutes);
 app.use("/api/experts", expertRoutes);
+app.use("/api", profileRoutes);
 
 // Start Server
 const PORT = process.env.PORT || 5000;

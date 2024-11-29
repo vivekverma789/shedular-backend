@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const scheduleController = require('../controllers/ScheduleController');
+const authMiddleware = require("../middlewares/authMiddleware");
 
 // Route to add a schedule (publish)
 router.post('/schedule/add', scheduleController.addSchedule);
