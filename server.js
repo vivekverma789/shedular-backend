@@ -26,12 +26,39 @@ connectDB();
 
 // Middleware
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000',
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-  credentials: true,
-}));
+// app.use(cors({
+//  // origin: 'http://localhost:3000',
+//     origin: 'https://shedular-admin-panel.vercel.app/',
+//   origin: 'https://shedular-web.vercel.app/',
+
+//   methods: 'GET,POST,PUT,DELETE',
+//   allowedHeaders: 'Content-Type,Authorization',
+//   credentials: true,
+// }));
+
+
+const allowedOrigins = [
+  'https://shedular-admin-panel.vercel.app',
+  'https://shedular-web.vercel.app',
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+  })
+);
 
 // Session Middleware
 app.use(
